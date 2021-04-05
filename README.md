@@ -6,3 +6,7 @@
 
 # My code
 Using Python, I attempted to implement the Merkle Tree algorithim. This program inputs n num of files from my Desktop's Merkle testing folder, and then computes the respective SHA1 hashes. Once the base data blocks have been hashed, the program combines the leaves into equal pairs and hashes them into a parent leaf. This process then continues untill the Merkle Root has been reached. See the image above for reference.
+
+# To run on your machine
+Replace the file input directory to your desired directory of files you want use. 
+For example: folderpath = r"C:/Users/YOURNAME/Desktop/YOUR FOLDER/"
