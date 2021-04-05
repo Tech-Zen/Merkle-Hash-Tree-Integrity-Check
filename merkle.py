@@ -1,9 +1,8 @@
-#Isaac Beasley
 #Merkle Root Algorithim with n file input
-
 import hashlib
 import os
-#Loop to open all files and append them to list
+
+#Loop to open all files and append them to leaves list
 folderpath = r"C:/Users/isaac/Desktop/merkle files/"
 filepaths = [os.path.join(folderpath, name) for name in os.listdir(folderpath)]
 
@@ -14,31 +13,34 @@ leaves = []
 for path in filepaths:
     with open(path, 'r') as f:
         data = f.read()
-        #hash the file's contents
         hash = hashlib.sha1(data.encode('utf-8')).hexdigest()
         leaves.append(hash)
 print("Blocks hashes:")
 print(leaves)
-print('')
 
-#Merkle tree is binary tree
-#Checks if num of files is odd, if so duplicate last file's hash to list
-if (len(leaves) % 2 != 0):
-    leaves.append(leaves[-1])
+#This function prints combined leaf pairs
+def print_leaves():
+    print(','.join(leaves))
 
-#Concatinate every pair list items, and pair hashes, continue loop untill Merkle Root is reached
-while (len(leaves)> 1) :
+#This function determines if input is odd
+def is_odd(n):
+    return n % 2 == 1
+
+while len(leaves) > 1:
+    if is_odd(len(leaves)):
+        leaves.append(leaves[-1])
+        print_leaves()
+    i = 0
     j = 0
-    for i in range(0, len(leaves) - 1):
-        leaves[j] = hashlib.sha1(leaves[i].encode('utf-8') + leaves[i+1].encode('utf-8')).hexdigest()
-        i += 2
-        j += 1
-
-    #deletes extra space in list
-    lastDelete = i - j
-    del leaves[-lastDelete:]
-    print(leaves)
+    while j < len(leaves):
+        leaves[i] = leaves[j] + leaves[j + 1]
+        leaves[i] = hashlib.sha1(leaves[i].encode('utf-8')).hexdigest()
+        i += 1
+        j += 2
+    leaves = leaves[:len(leaves) // 2]
+    print_leaves()
 
 MerkleRoot = leaves
 #This prints the Merkle Root
-print("Merkle Root:", MerkleRoot)
+print('')
+print("Merkle Root Hash:", MerkleRoot)
